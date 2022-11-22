@@ -1,12 +1,12 @@
 ### NAME
 
-    App-GUI-Harmonograph - Cyperharmonograph draws beautiful circular images
+    App-GUI-Dynagraph - drawing by dynamic systems of diff equations
 
 ### VERSION
  
-    0.43
+    0.01
 
-[Home on CPAN](https://metacpan.org/pod/App-Harmonograph)
+[Home on CPAN](https://metacpan.org/pod/App-Dynagraph)
 
     This is the landing page for the user documentation.
     There is also a download link on the left side under "Tools".
@@ -65,9 +65,9 @@
    
 
 
-[CHANGES](https://github.com/lichtkind/App-GUI-Harmonograph/blob/main/Changes) (with roadmap)
+[CHANGES](https://github.com/lichtkind/App-GUI-Dynagraph/blob/main/Changes) (with roadmap)
 
-[CONTRIBUTING](https://github.com/lichtkind/App-GUI-Harmonograph/blob/main/CONTRIBUTING)
+[CONTRIBUTING](https://github.com/lichtkind/App-GUI-Dynagraph/blob/main/CONTRIBUTING)
 
 ### COPYRIGHT
 
