@@ -2,29 +2,29 @@ use v5.12;
 use warnings;
 use Wx;
 
-package App::GUI::Dynagraph::Frame::Part::ColorBrowser;
+package App::GUI::Juliagraph::Frame::Part::ColorBrowser;
 use base qw/Wx::Panel/;
-use App::GUI::Dynagraph::SliderCombo;
-use App::GUI::Dynagraph::ColorDisplay;
+use App::GUI::Juliagraph::SliderCombo;
+use App::GUI::Juliagraph::ColorDisplay;
 use Graphics::Toolkit::Color;
 
 sub new {
     my ( $class, $parent, $type, $init  ) = @_;
     return unless ref $init eq 'HASH' and exists $init->{'red'}and exists $init->{'green'}and exists $init->{'blue'};
-    
+
     my $self = $class->SUPER::new( $parent, -1);
 
     $self->{'init'} = $init;
-    
-    $self->{'red'}   =  App::GUI::Dynagraph::SliderCombo->new( $self, 100, ' R  ', "red part of $type color",    0, 255,  0);
-    $self->{'green'} =  App::GUI::Dynagraph::SliderCombo->new( $self, 100, ' G  ', "green part of $type color",  0, 255,  0);
-    $self->{'blue'}  =  App::GUI::Dynagraph::SliderCombo->new( $self, 100, ' B  ', "blue part of $type color",   0, 255,  0);
-    $self->{'hue'}   =  App::GUI::Dynagraph::SliderCombo->new( $self, 100, ' H  ', "hue of $type color",         0, 359,  0);
-    $self->{'sat'}   =  App::GUI::Dynagraph::SliderCombo->new( $self, 100, ' S  ', "saturation of $type color",  0, 100,  0);
-    $self->{'light'} =  App::GUI::Dynagraph::SliderCombo->new( $self, 100, ' L  ', "lightness of $type color",   0, 100,  0);
-    $self->{'display'}= App::GUI::Dynagraph::ColorDisplay->new( $self, 25, 10, $init);
+
+    $self->{'red'}   =  App::GUI::Juliagraph::SliderCombo->new( $self, 100, ' R  ', "red part of $type color",    0, 255,  0);
+    $self->{'green'} =  App::GUI::Juliagraph::SliderCombo->new( $self, 100, ' G  ', "green part of $type color",  0, 255,  0);
+    $self->{'blue'}  =  App::GUI::Juliagraph::SliderCombo->new( $self, 100, ' B  ', "blue part of $type color",   0, 255,  0);
+    $self->{'hue'}   =  App::GUI::Juliagraph::SliderCombo->new( $self, 100, ' H  ', "hue of $type color",         0, 359,  0);
+    $self->{'sat'}   =  App::GUI::Juliagraph::SliderCombo->new( $self, 100, ' S  ', "saturation of $type color",  0, 100,  0);
+    $self->{'light'} =  App::GUI::Juliagraph::SliderCombo->new( $self, 100, ' L  ', "lightness of $type color",   0, 100,  0);
+    $self->{'display'}= App::GUI::Juliagraph::ColorDisplay->new( $self, 25, 10, $init);
     $self->{'display'}->SetToolTip("$type color monitor");
-    
+
     my $rgb2hsl = sub {
         my @rgb = ($self->{'red'}->GetValue, $self->{'green'}->GetValue, $self->{'blue'}->GetValue);
         my @hsl = Graphics::Toolkit::Color::Value::hsl_from_rgb( @rgb );
@@ -34,7 +34,7 @@ sub new {
         $self->{'display'}->set_color( { red => $rgb[0], green => $rgb[1], blue => $rgb[2] } );
     };
     my $hsl2rgb = sub {
-        my @rgb = Graphics::Toolkit::Color::Value::rgb_from_hsl( 
+        my @rgb = Graphics::Toolkit::Color::Value::rgb_from_hsl(
             $self->{'hue'}->GetValue,  $self->{'sat'}->GetValue, $self->{'light'}->GetValue );
         $self->{'red'}->SetValue( $rgb[0], 1 );
         $self->{'green'}->SetValue( $rgb[1], 1 );
@@ -78,13 +78,13 @@ sub new {
 sub init {
     my ($self) = @_;
     $self->set_data( $self->{'init'} );
-}    
+}
 
 sub get_data { $_[0]->{'display'}->get_color( ) }
 
 sub set_data {
     my ( $self, $data ) = @_;
-    return unless ref $data eq 'HASH' 
+    return unless ref $data eq 'HASH'
         and exists $data->{'red'} and exists $data->{'green'} and exists $data->{'blue'};
     $self->{'red'}->SetValue( $data->{'red'}, 1);
     $self->{'green'}->SetValue( $data->{'green'}, 1);

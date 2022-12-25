@@ -6,20 +6,18 @@ use Wx::AUI;
 # modular conections
 # X Y sync ? , undo ?
 
-package App::GUI::Dynagraph::Frame;
+package App::GUI::Juliagraph::Frame;
 use base qw/Wx::Frame/;
-use App::GUI::Dynagraph::Frame::Part::Pendulum;
-use App::GUI::Dynagraph::Frame::Part::ColorFlow;
-use App::GUI::Dynagraph::Frame::Part::ColorBrowser;
-use App::GUI::Dynagraph::Frame::Part::ColorPicker;
-use App::GUI::Dynagraph::Frame::Part::PenLine;
-use App::GUI::Dynagraph::Frame::Part::Board;
-use App::GUI::Dynagraph::Dialog::Function;
-use App::GUI::Dynagraph::Dialog::Interface;
-use App::GUI::Dynagraph::Dialog::About;
-use App::GUI::Dynagraph::ProgressBar;
-use App::GUI::Dynagraph::Settings;
-use App::GUI::Dynagraph::Config;
+use App::GUI::Juliagraph::Frame::Part::Pendulum;
+use App::GUI::Juliagraph::Frame::Part::ColorFlow;
+use App::GUI::Juliagraph::Frame::Part::ColorBrowser;
+use App::GUI::Juliagraph::Frame::Part::ColorPicker;
+use App::GUI::Juliagraph::Frame::Part::PenLine;
+use App::GUI::Juliagraph::Frame::Part::Board;
+use App::GUI::Juliagraph::Dialog::About;
+use App::GUI::Juliagraph::ProgressBar;
+use App::GUI::Juliagraph::Settings;
+use App::GUI::Juliagraph::Config;
 
 sub new {
     my ( $class, $parent, $title ) = @_;
@@ -28,7 +26,7 @@ sub new {
     $self->CreateStatusBar( 2 );
     $self->SetStatusWidths(2, 800, 100);
     $self->SetStatusText( "no file loaded", 1 );
-    $self->{'config'} = App::GUI::Dynagraph::Config->new();
+    $self->{'config'} = App::GUI::Juliagraph::Config->new();
     Wx::ToolTip::Enable( $self->{'config'}->get_value('tips') );
     Wx::InitAllImageHandlers();
 
@@ -39,23 +37,21 @@ sub new {
     $self->{'tabs'}->AddPage( $self->{'tab'}{'pendulum'}, 'Simple Cells');
     $self->{'tabs'}->AddPage( $self->{'tab'}{'pen'},      'Pen Settings');
 
-    $self->{'pendulum'}{'x'}    = App::GUI::Dynagraph::Frame::Part::Pendulum->new( $self->{'tab'}{'pendulum'}, 'x','pendulum in x direction (left to right)', 1, 30);
+    $self->{'pendulum'}{'x'}    = App::GUI::Juliagraph::Frame::Part::Pendulum->new( $self->{'tab'}{'pendulum'}, 'x','pendulum in x direction (left to right)', 1, 30);
     $self->{'pendulum'}{$_}->SetCallBack( sub { $self->sketch( ) } ) for qw/x/;
-                                
-    $self->{'color'}{'start'}   = App::GUI::Dynagraph::Frame::Part::ColorBrowser->new( $self->{'tab'}{'pen'}, 'start', { red => 20, green => 20, blue => 110 } );
-    $self->{'color'}{'end'}     = App::GUI::Dynagraph::Frame::Part::ColorBrowser->new( $self->{'tab'}{'pen'}, 'end',  { red => 110, green => 20, blue => 20 } );
-    
-    $self->{'color'}{'startio'} = App::GUI::Dynagraph::Frame::Part::ColorPicker->new( $self->{'tab'}{'pen'}, $self, 'Start Color IO', $self->{'config'}->get_value('color') , 162, 1);
-    $self->{'color'}{'endio'}   = App::GUI::Dynagraph::Frame::Part::ColorPicker->new( $self->{'tab'}{'pen'}, $self, 'End Color IO', $self->{'config'}->get_value('color') , 162, 7);
 
-    $self->{'color_flow'}       = App::GUI::Dynagraph::Frame::Part::ColorFlow->new( $self->{'tab'}{'pen'}, $self );
-    $self->{'line'}             = App::GUI::Dynagraph::Frame::Part::PenLine->new( $self->{'tab'}{'pen'} );
-                               
-    $self->{'progress'}            = App::GUI::Dynagraph::ProgressBar->new( $self, 450, 5, { red => 20, green => 20, blue => 110 });
-    $self->{'board'}               = App::GUI::Dynagraph::Frame::Part::Board->new( $self , 600, 600 );
-    $self->{'dialog'}{'about'}     = App::GUI::Dynagraph::Dialog::About->new();
-    $self->{'dialog'}{'interface'} = App::GUI::Dynagraph::Dialog::Interface->new();
-    $self->{'dialog'}{'function'}  = App::GUI::Dynagraph::Dialog::Function->new();
+    $self->{'color'}{'start'}   = App::GUI::Juliagraph::Frame::Part::ColorBrowser->new( $self->{'tab'}{'pen'}, 'start', { red => 20, green => 20, blue => 110 } );
+    $self->{'color'}{'end'}     = App::GUI::Juliagraph::Frame::Part::ColorBrowser->new( $self->{'tab'}{'pen'}, 'end',  { red => 110, green => 20, blue => 20 } );
+
+    $self->{'color'}{'startio'} = App::GUI::Juliagraph::Frame::Part::ColorPicker->new( $self->{'tab'}{'pen'}, $self, 'Start Color IO', $self->{'config'}->get_value('color') , 162, 1);
+    $self->{'color'}{'endio'}   = App::GUI::Juliagraph::Frame::Part::ColorPicker->new( $self->{'tab'}{'pen'}, $self, 'End Color IO', $self->{'config'}->get_value('color') , 162, 7);
+
+    $self->{'color_flow'}       = App::GUI::Juliagraph::Frame::Part::ColorFlow->new( $self->{'tab'}{'pen'}, $self );
+    $self->{'line'}             = App::GUI::Juliagraph::Frame::Part::PenLine->new( $self->{'tab'}{'pen'} );
+
+    $self->{'progress'}            = App::GUI::Juliagraph::ProgressBar->new( $self, 450, 5, { red => 20, green => 20, blue => 110 });
+    $self->{'board'}               = App::GUI::Juliagraph::Frame::Part::Board->new( $self , 600, 600 );
+    $self->{'dialog'}{'about'}     = App::GUI::Juliagraph::Dialog::About->new();
 
     my $btnw = 50; my $btnh     = 40;# button width and height
     #Wx::Event::EVT_BUTTON( $self, $self->{'btn'}{'exit'},  sub { $self->Close; } );
@@ -75,17 +71,17 @@ sub new {
     $self->{'txt'}{'file_bnr'}->SetToolTip("index of file base name,\nwhen pushing Next button, image or settings are saved under Dir + File + Index + Ending");
 
 
-    #Wx::Event::EVT_TOGGLEBUTTON( $self, $self->{'btn'}{'tips'},  sub { 
+    #Wx::Event::EVT_TOGGLEBUTTON( $self, $self->{'btn'}{'tips'},  sub {
     #    Wx::ToolTip::Enable( $_[1]->IsChecked );
     #    $self->{'config'}->set_value('tips', $_[1]->IsChecked ? 1 : 0 );
     #});
     Wx::Event::EVT_TEXT_ENTER( $self, $self->{'txt'}{'file_bname'}, sub { $self->update_base_name });
     Wx::Event::EVT_KILL_FOCUS(        $self->{'txt'}{'file_bname'}, sub { $self->update_base_name });
-    
+
     Wx::Event::EVT_BUTTON( $self, $self->{'btn'}{'dir'},  sub { $self->change_base_dir }) ;
     Wx::Event::EVT_BUTTON( $self, $self->{'btn'}{'write_next'},  sub {
         my $data = get_data( $self );
-        $self->inc_base_counter unless App::GUI::Dynagraph::Settings::are_equal( $self->{'last_file_settings'}, $data );
+        $self->inc_base_counter unless App::GUI::Juliagraph::Settings::are_equal( $self->{'last_file_settings'}, $data );
         my $path = $self->base_path . '.ini';
         $self->write_settings_file( $path);
         $self->{'config'}->add_setting_file( $path );
@@ -93,7 +89,7 @@ sub new {
     });
     Wx::Event::EVT_BUTTON( $self, $self->{'btn'}{'save_next'},  sub {
         my $data = get_data( $self );
-        $self->inc_base_counter unless App::GUI::Dynagraph::Settings::are_equal( $self->{'last_file_settings'}, $data );
+        $self->inc_base_counter unless App::GUI::Juliagraph::Settings::are_equal( $self->{'last_file_settings'}, $data );
         my $path = $self->base_path . '.' . $self->{'config'}->get_value('file_base_ending');
         $self->write_image( $path );
         $self->{'last_file_settings'} = $data;
@@ -118,13 +114,13 @@ sub new {
             } else { delete $all_color->{$name} }
         }
         $self->{'config'}->save();
-        $self->{'dialog'}{$_}->Destroy() for qw/interface function about/;
-        $_[1]->Skip(1) 
+        $self->{'dialog'}{$_}->Destroy() for qw/about/;
+        $_[1]->Skip(1)
     });
 
 
     # GUI layout assembly
-    
+
     my $settings_menu = $self->{'setting_menu'} = Wx::Menu->new();
     $settings_menu->Append( 11100, "&Init\tCtrl+I", "put all settings to default" );
     $settings_menu->Append( 11200, "&Open\tCtrl+O", "load settings from an INI file" );
@@ -137,12 +133,12 @@ sub new {
     for (1 .. 20) {
         my $size = $_ * 100;
         $image_size_menu->AppendRadioItem(12100 + $_, $size, "set image size to $size x $size");
-        Wx::Event::EVT_MENU( $self, 12100 + $_, sub { 
-            my $size = 100 * ($_[1]->GetId - 12100); 
+        Wx::Event::EVT_MENU( $self, 12100 + $_, sub {
+            my $size = 100 * ($_[1]->GetId - 12100);
             $self->{'config'}->set_value('image_size', $size);
             $self->{'board'}->set_size( $size );
         });
-        
+
     }
     $image_size_menu->Check( 12100 +($self->{'config'}->get_value('image_size') / 100), 1);
 
@@ -150,7 +146,7 @@ sub new {
     $image_format_menu->AppendRadioItem(12201, 'PNG', "set default image format to PNG");
     $image_format_menu->AppendRadioItem(12202, 'JPEG', "set default image format to JPEG");
     $image_format_menu->AppendRadioItem(12203, 'SVG', "set default image format to SVG");
-    
+
     Wx::Event::EVT_MENU( $self, 12201, sub { $self->{'config'}->set_value('file_base_ending', 'png') });
     Wx::Event::EVT_MENU( $self, 12202, sub { $self->{'config'}->set_value('file_base_ending', 'jpg') });
     Wx::Event::EVT_MENU( $self, 12203, sub { $self->{'config'}->set_value('file_base_ending', 'svg') });
@@ -158,17 +154,15 @@ sub new {
     $image_format_menu->Check( 12201, 1 ) if $self->{'config'}->get_value('file_base_ending') eq 'png';
     $image_format_menu->Check( 12202, 1 ) if $self->{'config'}->get_value('file_base_ending') eq 'jpg';
     $image_format_menu->Check( 12203, 1 ) if $self->{'config'}->get_value('file_base_ending') eq 'svg';
-    
+
     my $image_menu = Wx::Menu->new();
     $image_menu->Append( 12300, "&Draw\tCtrl+D", "complete a sketch drawing" );
     $image_menu->Append( 12100, "S&ize",  $image_size_menu,   "set image size" );
     $image_menu->Append( 12200, "&Format",  $image_format_menu, "set default image formate" );
     $image_menu->Append( 12400, "&Save\tCtrl+S", "save currently displayed image" );
 
-    
+
     my $help_menu = Wx::Menu->new();
-    $help_menu->Append( 13100, "&Function\tAlt+F", "Dialog with information how an Dynagraph works" );
-    $help_menu->Append( 13200, "&Knobs\tAlt+K", "Dialog explaining the layout and function of knobs" );
     $help_menu->Append( 13300, "&About\tAlt+A", "Dialog with general information about the program" );
 
     my $menu_bar = Wx::MenuBar->new();
@@ -193,7 +187,7 @@ sub new {
     my $horiz_attr = $std_attr | &Wx::wxLEFT;
     my $all_attr    = $std_attr | &Wx::wxALL;
     my $line_attr    = $std_attr | &Wx::wxLEFT | &Wx::wxRIGHT ;
- 
+
      my $pendulum_sizer = Wx::BoxSizer->new(&Wx::wxVERTICAL);
     $pendulum_sizer->AddSpacer(15);
     $pendulum_sizer->Add( $self->{'pendulum'}{'x'},   0, $vert_attr| &Wx::wxLEFT, 15);
@@ -220,7 +214,7 @@ sub new {
 
     $pen_sizer->Add( 0, 1, &Wx::wxEXPAND | &Wx::wxGROW);
     $self->{'tab'}{'pen'}->SetSizer( $pen_sizer );
-    
+
     my $cmdi_sizer = Wx::BoxSizer->new( &Wx::wxHORIZONTAL );
     my $image_lbl = Wx::StaticText->new( $self, -1, 'Image:' );
     $cmdi_sizer->Add( $image_lbl,     0, $all_attr, 15 );
@@ -264,7 +258,7 @@ sub new {
     $self->SetSize($size);
     $self->SetMinSize($size);
     $self->SetMaxSize($size);
-  
+
     $self->update_recent_settings_menu();
     $self->init();
     $self->{'last_file_settings'} = get_data( $self );
@@ -289,8 +283,8 @@ sub open_settings_dialog {
     my $path = $dialog->GetPath;
     my $ret = $self->open_setting_file ( $path );
     if (not ref $ret) { $self->SetStatusText( $ret, 0) }
-    else { 
-        my $dir = App::GUI::Dynagraph::Settings::extract_dir( $path );
+    else {
+        my $dir = App::GUI::Juliagraph::Settings::extract_dir( $path );
         $self->{'config'}->set_value('save_dir', $dir);
         $self->SetStatusText( "loaded settings from ".$dialog->GetPath, 1);
     }
@@ -309,7 +303,7 @@ sub write_settings_dialog {
               Wx::MessageDialog->new( $self, "\n\nReally overwrite the settings file?", 'Confirmation Question',
                                       &Wx::wxYES_NO | &Wx::wxICON_QUESTION )->ShowModal() != &Wx::wxID_YES;
     $self->write_settings_file( $path );
-    my $dir = App::GUI::Dynagraph::Settings::extract_dir( $path );
+    my $dir = App::GUI::Juliagraph::Settings::extract_dir( $path );
     $self->{'config'}->set_value('write_dir', $dir);
 }
 
@@ -320,7 +314,7 @@ sub save_image_dialog {
     $wildcard = ( join '|', @wildcard[2,1,0]) . $wildcard if $self->{'config'}->get_value('file_base_ending') eq 'jpg';
     $wildcard = ( join '|', @wildcard[1,0,2]) . $wildcard if $self->{'config'}->get_value('file_base_ending') eq 'png';
     $wildcard = ( join '|', @wildcard[0,1,2]) . $wildcard if $self->{'config'}->get_value('file_base_ending') eq 'svg';
-    
+
     my $dialog = Wx::FileDialog->new ( $self, "select a file name to save image", $self->{'config'}->get_value('save_dir'), '', $wildcard, &Wx::wxFD_SAVE );
     return if $dialog->ShowModal == &Wx::wxID_CANCEL;
     my $path = $dialog->GetPath;
@@ -329,12 +323,12 @@ sub save_image_dialog {
                                       &Wx::wxYES_NO | &Wx::wxICON_QUESTION )->ShowModal() != &Wx::wxID_YES;
     my $ret = $self->write_image( $path );
     if ($ret){ $self->SetStatusText( $ret, 0 ) }
-    else     { $self->{'config'}->set_value('save_dir', App::GUI::Dynagraph::Settings::extract_dir( $path )) }
+    else     { $self->{'config'}->set_value('save_dir', App::GUI::Juliagraph::Settings::extract_dir( $path )) }
 }
 
 sub get_data {
     my $self = shift;
-    { 
+    {
         x => $self->{'pendulum'}{'x'}->get_data,
         start_color => $self->{'color'}{'start'}->get_data,
         end_color => $self->{'color'}{'end'}->get_data,
@@ -382,12 +376,12 @@ sub update_base_name {
 sub inc_base_counter {
     my ($self) = @_;
     my $dir = $self->{'config'}->get_value('file_base_dir');
-    $dir = App::GUI::Dynagraph::Settings::expand_path( $dir );
+    $dir = App::GUI::Juliagraph::Settings::expand_path( $dir );
     my $base = File::Spec->catfile( $dir, $self->{'config'}->get_value('file_base_name') );
     my $cc = $self->{'config'}->get_value('file_base_counter');
     while (1){
-        last unless -e $base.'_'.$cc.'.svg' 
-                 or -e $base.'_'.$cc.'.png' 
+        last unless -e $base.'_'.$cc.'.svg'
+                 or -e $base.'_'.$cc.'.png'
                  or -e $base.'_'.$cc.'.jpg'
                  or -e $base.'_'.$cc.'.gif'
                  or -e $base.'_'.$cc.'.ini';
@@ -404,7 +398,7 @@ sub change_base_dir {
     my $dialog = Wx::DirDialog->new ( $self, "Select a directory to store a series of files", $self->{'config'}->get_value('file_base_dir'));
     return if $dialog->ShowModal == &Wx::wxID_CANCEL;
     my $new_dir = $dialog->GetPath;
-    $new_dir = App::GUI::Dynagraph::Settings::shrink_path( $new_dir ) . '/';
+    $new_dir = App::GUI::Juliagraph::Settings::shrink_path( $new_dir ) . '/';
     $self->{'txt'}{'file_bdir'}->SetValue( $new_dir );
     $self->{'config'}->set_value('file_base_dir', $new_dir);
     $self->update_base_name();
@@ -413,19 +407,19 @@ sub change_base_dir {
 sub base_path {
     my ($self) = @_;
     my $dir = $self->{'config'}->get_value('file_base_dir');
-    $dir = App::GUI::Dynagraph::Settings::expand_path( $dir );
+    $dir = App::GUI::Juliagraph::Settings::expand_path( $dir );
     File::Spec->catfile( $dir, $self->{'config'}->get_value('file_base_name') )
         .'_'.$self->{'config'}->get_value('file_base_counter');
-    
+
 }
 
 sub open_setting_file {
     my ($self, $file ) = @_;
-    my $data = App::GUI::Dynagraph::Settings::load( $file );
+    my $data = App::GUI::Juliagraph::Settings::load( $file );
     if (ref $data) {
         $self->set_data( $data );
         $self->draw;
-        my $dir = App::GUI::Dynagraph::Settings::extract_dir( $file );
+        my $dir = App::GUI::Juliagraph::Settings::extract_dir( $file );
         $self->{'config'}->set_value('open_dir', $dir);
         $self->SetStatusText( "loaded settings from ".$file, 1) ;
         $self->{'config'}->add_setting_file( $file );
@@ -438,9 +432,9 @@ sub open_setting_file {
 
 sub write_settings_file {
     my ($self, $file)  = @_;
-    my $ret = App::GUI::Dynagraph::Settings::write( $file, $self->get_data );
+    my $ret = App::GUI::Juliagraph::Settings::write( $file, $self->get_data );
     if ($ret){ $self->SetStatusText( $ret, 0 ) }
-    else     { 
+    else     {
         $self->{'config'}->add_setting_file( $file );
         $self->update_recent_settings_menu();
         $self->SetStatusText( "saved settings into file $file", 1 );
@@ -467,7 +461,7 @@ sub update_recent_settings_menu {
 sub write_image {
     my ($self, $file)  = @_;
     $self->{'board'}->save_file( $file );
-    $file = App::GUI::Dynagraph::Settings::shrink_path( $file );
+    $file = App::GUI::Juliagraph::Settings::shrink_path( $file );
     $self->SetStatusText( "saved image under: $file", 0 );
 }
 

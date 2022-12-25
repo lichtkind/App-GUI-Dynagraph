@@ -2,7 +2,7 @@ use v5.12;
 use warnings;
 use Wx;
 
-package App::GUI::Dynagraph::ProgressBar;
+package App::GUI::Juliagraph::ProgressBar;
 use base qw/Wx::Panel/;
 
 sub new {
@@ -10,12 +10,12 @@ sub new {
     return unless ref $color eq 'HASH' and exists $color->{'red'} and exists $color->{'green'}and exists $color->{'blue'};
 
     my $self = $class->SUPER::new( $parent, -1, [-1,-1], [$x, $y]);
-    
+
     $self->{'x'}     = $x;
     $self->{'y'}     = $y;
     $self->{'color'} = $color;
     $self->{'percentage'} = 0;
- 
+
     Wx::Event::EVT_PAINT( $self, sub {
         my( $cpanel, $event ) = @_;
         my $dc = Wx::PaintDC->new( $cpanel );
@@ -26,7 +26,7 @@ sub new {
         my $min_pos = $x * ($self->{'percentage'} - 10) / 100 ;
         $min_pos = 0 if $min_pos < 0;
         $min_pos = $x if $self->{'percentage'} == 100;
-        
+
         $dc->SetPen( Wx::Pen->new( $fg_color, 1, &Wx::wxPENSTYLE_SOLID) );
         $dc->SetBackground( Wx::Brush->new( $bg_color, &Wx::wxBRUSHSTYLE_SOLID ) );
         $dc->Clear();

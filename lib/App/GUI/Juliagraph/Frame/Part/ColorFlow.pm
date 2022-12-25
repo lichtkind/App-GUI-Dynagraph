@@ -2,9 +2,9 @@ use v5.12;
 use warnings;
 use Wx;
 
-package App::GUI::Dynagraph::Frame::Part::ColorFlow;
+package App::GUI::Juliagraph::Frame::Part::ColorFlow;
 use base qw/Wx::Panel/;
-use App::GUI::Dynagraph::SliderCombo;
+use App::GUI::Juliagraph::SliderCombo;
 
 sub new {
     my ( $class, $parent, $frame ) = @_;
@@ -17,8 +17,8 @@ sub new {
     $self->{'dynlabel'} = Wx::StaticText->new( $self, -1, 'Dynamics');
     $self->{'dynamic'}  = Wx::ComboBox->new( $self, -1, 1, [-1,-1],[65, -1], [1,2,3,4,5,6,7,8, 9, 10], 1);
     $self->{'dynamic'}->SetToolTip('dynamics of linear and alternating color change (1 = equal distanced colors change,\n larger = starting with slow color change becoming faster - or vice versa when dir activated)');
-    $self->{'stepsize'}  = App::GUI::Dynagraph::SliderCombo->new( $self,  94, 'Step Size','after how many circles does color change', 1, 100, 1);
-    $self->{'period'}    = App::GUI::Dynagraph::SliderCombo->new( $self, 100, 'Period','amount of steps from start to end color', 2, 50, 10);
+    $self->{'stepsize'}  = App::GUI::Juliagraph::SliderCombo->new( $self,  94, 'Step Size','after how many circles does color change', 1, 100, 1);
+    $self->{'period'}    = App::GUI::Juliagraph::SliderCombo->new( $self, 100, 'Period','amount of steps from start to end color', 2, 50, 10);
     $self->{'direction'} = Wx::CheckBox->new( $self, -1, ' Dir.');
     $self->{'direction'}->SetToolTip('if on color change starts fast getting slower, if odd starting slow ...');
 
@@ -26,7 +26,7 @@ sub new {
 
 
     my $cf_attr = &Wx::wxLEFT|&Wx::wxALIGN_LEFT|&Wx::wxALIGN_CENTER_VERTICAL;
-    
+
     my $row_sizer = Wx::BoxSizer->new(&Wx::wxHORIZONTAL);
     $row_sizer->Add( $flow_label,           0, $cf_attr,  20);
     $row_sizer->Add( $self->{'type'},       0, $cf_attr,  10);
@@ -67,7 +67,7 @@ sub get_data {
 sub set_data {
     my ( $self, $data ) = @_;
     return unless ref $data eq 'HASH';
-    $self->{$_}->SetValue( $data->{$_} ) for qw/type stepsize period/, 
+    $self->{$_}->SetValue( $data->{$_} ) for qw/type stepsize period/,
     $self->{ 'dynamic' }->SetValue( $data->{'dynamic'} < 1 ? 1 / $data->{'dynamic'} : $data->{'dynamic'} );
     $self->{ 'direction' }->SetValue( $data->{'dynamic'} < 1 );
     $self->update_enable( );

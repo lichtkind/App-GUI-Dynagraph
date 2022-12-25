@@ -2,7 +2,7 @@ use v5.12;
 use warnings;
 use Wx;
 
-package App::GUI::Dynagraph::Frame::Part::Board;
+package App::GUI::Juliagraph::Frame::Part::Board;
 use base qw/Wx::Panel/;
 my $TAU = 6.283185307;
 
@@ -28,18 +28,18 @@ sub new {
         $self->{'y_pos'} = $self->GetPosition->y;
 
         if (exists $self->{'data'}{'new'}) {
-            $self->{'dc'}->Blit (0, 0, $self->{'size'}{'x'} + $self->{'x_pos'}, 
-                                       $self->{'size'}{'y'} + $self->{'y_pos'} + $self->{'menu_size'}, 
+            $self->{'dc'}->Blit (0, 0, $self->{'size'}{'x'} + $self->{'x_pos'},
+                                       $self->{'size'}{'y'} + $self->{'y_pos'} + $self->{'menu_size'},
                                        $self->paint( Wx::PaintDC->new( $self ), $self->{'size'}{'x'}, $self->{'size'}{'y'} ), 0, 0);
         } else {
-            Wx::PaintDC->new( $self )->Blit (0, 0, $self->{'size'}{'x'}, 
-                                                   $self->{'size'}{'y'} + $self->{'menu_size'}, 
-                                                   $self->{'dc'}, 
+            Wx::PaintDC->new( $self )->Blit (0, 0, $self->{'size'}{'x'},
+                                                   $self->{'size'}{'y'} + $self->{'menu_size'},
+                                                   $self->{'dc'},
                                                    $self->{'x_pos'} , $self->{'y_pos'} + $self->{'menu_size'} );
         }
         1;
     }); # Blit (xdest, ydest, width, height, DC *src, xsrc, ysrc, wxRasterOperationMode logicalFunc=wxCOPY, bool useMask=false)
-    
+
     return $self;
 }
 
@@ -58,8 +58,8 @@ sub paint {
     my $background_color = Wx::Colour->new( 255, 255, 255 );
     $dc->SetBackground( Wx::Brush->new( $background_color, &Wx::wxBRUSHSTYLE_SOLID ) );     # $dc->SetBrush( $fgb );
     $dc->Clear();
-    
-    
+
+
     delete $self->{'data'}{'new'};
     delete $self->{'data'}{'sketch'};
     $dc;
@@ -69,7 +69,7 @@ sub save_file {
     my( $self, $file_name, $width, $height ) = @_;
     my $file_end = lc substr( $file_name, -3 );
     if ($file_end eq 'svg') { $self->save_svg_file( $file_name, $width, $height ) }
-    elsif ($file_end eq 'png' or $file_end eq 'jpg') { $self->save_bmp_file( $file_name, $file_end, $width, $height ) } 
+    elsif ($file_end eq 'png' or $file_end eq 'jpg') { $self->save_bmp_file( $file_name, $file_end, $width, $height ) }
     else { return "unknown file ending: '$file_end'" }
 }
 
